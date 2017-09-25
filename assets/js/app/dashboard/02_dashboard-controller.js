@@ -9,9 +9,9 @@
   angular.module('frontend.dashboard')
     .controller('DashboardController', [
       '$scope', '$rootScope','$log', '$state','$q','InfoService','$localStorage','HttpTimeout',
-        'SettingsService', 'NodeModel','$timeout', 'MessageService','UserModel','UserService',
+        'SettingsService', 'NodeModel','$timeout', 'MessageService','UserModel','UserService','Semver',
       function controller($scope,$rootScope, $log, $state,$q,InfoService,$localStorage,HttpTimeout,
-                          SettingsService, NodeModel, $timeout, MessageService, UserModel, UserService) {
+                          SettingsService, NodeModel, $timeout, MessageService, UserModel, UserService, Semver) {
 
 
           var loadTime = $rootScope.KONGA_CONFIG.info_polling_interval,
@@ -21,8 +21,16 @@
 
           $scope.HttpTimeout = HttpTimeout;
 
+          $scope.showCluster = $rootScope.Gateway ? Semver.cmp($rootScope.Gateway.version,"0.11.0") < 0 : false;
+
+          $scope.isKongVersionGreater = function (version) {
+              return $rootScope.Gateway ? Semver.cmp($rootScope.Gateway.version,version) >= 0 : false;
+          }
+
           $scope.closeAlert = function() {
-              if($scope.alert) delete $scope.alert
+              if($scope.alert) {
+                  delete $scope.alert;
+              }
           }
 
           $scope.isEnabled = function(name) {
@@ -41,11 +49,7 @@
                   server : {
                       labels : [
                           'Accepted',
-                          'Active',
                           'Handled',
-                          'Reading',
-                          'Waiting',
-                          'Writing',
                           'Total Requests'
                       ],
                       options: {
@@ -56,19 +60,53 @@
                                       maxRotation: 0,
                                       minRotation: 0
                                   }
+                              }],
+                              yAxes: [{
+                                  ticks: {
+                                      min: 0
+                                  }
                               }]
                           }
                       },
                       series : ['Connections'],
                       data : [
                           $scope.status.server.connections_accepted,
-                          $scope.status.server.connections_active,
                           $scope.status.server.connections_handled,
+                          $scope.status.server.total_requests
+                      ]
+                  },
+                  activity : {
+                      labels : [
+                          'Active',
+                          'Reading',
+                          'Waiting',
+                          'Writing',
+                      ],
+                      options: {
+                          scales: {
+                              xAxes: [{
+                                  ticks: {
+                                      autoSkip: false,
+                                      maxRotation: 0,
+                                      minRotation: 0
+                                  }
+                              }],
+                              yAxes: [{
+                                  ticks: {
+                                      min: 0
+                                  }
+                              }]
+                          }
+                      },
+                      series : ['Connections'],
+                      data : [
+                          $scope.status.server.connections_active,
                           $scope.status.server.connections_reading,
                           $scope.status.server.connections_waiting,
-                          $scope.status.server.connections_writing,
-                          $scope.status.server.total_requests,
+                          $scope.status.server.connections_writing
                       ]
+
+
                   },
                   timers : {
                       labels : [
@@ -76,10 +114,11 @@
                           'Running'
                       ],
                       options : {
-                          //title: {
-                          //    display: true,
-                          //    text: 'timers'
-                          //},
+                          yAxes: [{
+                            ticks: {
+                              min: 0
+                          }
+                        }]
                       },
                       series : ['Timers'],
                       data : [

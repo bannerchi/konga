@@ -44,6 +44,10 @@ module.exports.policies = {
     '*':              ['authenticated'],
   },
 
+  KongSchemasController : {
+      '*':              ['authenticated'],
+  },
+
   KongPluginsController : {
     '*':              ['authenticated','dynamicNode'],
   },
@@ -117,6 +121,7 @@ module.exports.policies = {
   SnapshotController : {
     '*': ['authenticated'],
     'takeSnapShot' : ['authenticated','dynamicNode','createUser'],
+    'restore' : ['authenticated','dynamicNode']
   },
 
   SettingsController : {
