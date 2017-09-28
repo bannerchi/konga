@@ -10,7 +10,7 @@ describe('Generic controller test', function controllerTest() {
     [
         {
             controller: 'UserController',
-            url: '/user/',
+            url: '/api/user/',
             identifier: 1,
             count: 2,
             data: {
@@ -40,7 +40,7 @@ describe('Generic controller test', function controllerTest() {
         },
         {
             controller: 'KongNodeController',
-            url: '/kongnode/',
+            url: '/api/kongnode/',
             identifier: 1,
             count: 1,
             data: {
