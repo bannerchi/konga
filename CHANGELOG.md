@@ -133,7 +133,8 @@ All notable changes to this project will be documented in this file.
 ## [0.9.0](https://github.com/pantsel/konga/releases/tag/v0.9.0) - 25-9-2017
 
 * [FIX] Fix broken dependencies.
-* [BREAKING CHANGE] Changed docker volume implementation. Everyone using the default filesystem db, 
+* [FIX] Fix tests.
+* [BREAKING CHANGE] Changed docker volume implementation. Anyone using the default filesystem db, 
 will have to migrate their data from the previous <code>/kongadata</code> dir to the dir that can be mapped at startup.
-You can define a data dir mapping by issuing <code>-v [host-dir]:kongadata</code> when starting the container.
+You can define a data dir mapping by issuing <code>-v [host-dir]:app/.tmp</code> when starting the container.
 Check the <code>Running Konga</code> section of <code>README.md</code> for more details.

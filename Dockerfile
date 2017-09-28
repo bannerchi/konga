@@ -18,6 +18,6 @@ EXPOSE 1337
 
 RUN chmod 777 ./start.sh
 
-VOLUME .tmp
+VOLUME . /app/.tmp
 
 ENTRYPOINT ["/bin/bash","./start.sh"]
